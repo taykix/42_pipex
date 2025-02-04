@@ -19,7 +19,7 @@ void free_path_and_script(char *path, char **script)
 void	free_pipex(t_pipex *pipe, int argc)
 {
     int i = 0;
-	for (int i = 0; i < argc - 2; i++)
+	for (int i = 0; i < argc - 3; i++)
 	{
 		free_path_and_script(pipe->path[i], pipe->script[i]);
 	}
