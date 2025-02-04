@@ -6,7 +6,7 @@
 /*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:10:31 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/04 19:12:57 by tayki            ###   ########.fr       */
+/*   Updated: 2025/02/04 23:58:16 by tayki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, int argc)
 	return (pipe);
 }
 
-int	main(int argc, char *argv[], char *env[])
+int	main(int argc, char *argv[])
 {
 	t_pipex	pipe;
 	int		pid;
