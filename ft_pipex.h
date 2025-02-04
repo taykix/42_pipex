@@ -25,5 +25,8 @@ void		execute_command(const char *path, char **args);
 char		**get_next_script(int num, char **argv);
 int			parent_process(t_pipex *pipe, int i);
 int			child_process(t_pipex *pipe, int i);
+void		free_pipex(t_pipex *pipe, int argc);
+void		create_pipe(int fd[2]);
+void		free_path_and_script(char *path, char **script);
 
 #endif
