@@ -29,6 +29,7 @@ void	free_pipex(t_pipex *pipe, int argc)
 
 int	child_process(t_pipex *pipe, int i)
 {
+	close(pipe->fd[0]);
 	dup2(pipe->in_fd, STDIN_FILENO);
 	dup2(pipe->fd[1], STDOUT_FILENO);
 	close(pipe->in_fd);
@@ -44,6 +45,7 @@ void create_pipe(int fd[2])
 
 int	parent_process(t_pipex *pipe, int i)
 {
+	close(pipe->fd[1]);
 	dup2(pipe->fd[0], STDIN_FILENO);
 	dup2(pipe->out_fd, STDOUT_FILENO);
 	close(pipe->fd[0]);
