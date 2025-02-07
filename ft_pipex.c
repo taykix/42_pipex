@@ -3,14 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:10:31 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/04 23:58:16 by tayki            ###   ########.fr       */
+/*   Updated: 2025/02/07 20:59:14 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_pipex.h"
+
+// "awk '{print avs $2}'"
+char	**handle_quotes_in_script(char **script)
+{
+	int		i;
+	int		j;
+	char	**new_script;
+
+	i = 0;
+	j = 0;
+	new_script = (char **)malloc(sizeof(char *) * (ft_strlen(script) + 1));
+	if (!new_script)
+		handle_error(1, "Memory allocation error\n");
+	while (script[i])
+	{
+		if (ft_strchr("\'", script[i][0]))
+		{
+			new_script[j] = ft_strdup(script[i]);
+			while (script[++i])
+			{
+				new_script[j] = ft_strjoin(new_script[j], " ");
+				new_script[j] = ft_strjoin(new_script[j], script[i]);
+				if (ft_strchr("\'", script[i]))
+					break ;
+			}
+		}
+		else
+			new_script[j] = ft_strdup(script[i]);
+		i++;
+		j++;
+	}
+	new_script[j] = NULL;
+	return (new_script);
+}
 
 char	**get_next_script(int num, char **argv)
 {
