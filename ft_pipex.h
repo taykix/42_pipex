@@ -28,5 +28,6 @@ int			child_process(t_pipex *pipe, int i);
 void		free_pipex(t_pipex *pipe, int argc);
 void		create_pipe(int fd[2]);
 void		free_path_and_script(char *path, char **script);
+void		free_script(char** script);
 
 #endif

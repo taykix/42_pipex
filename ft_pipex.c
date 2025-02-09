@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+﻿/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_pipex.c                                         :+:      :+:    :+:   */
@@ -12,6 +12,34 @@
 
 #include "ft_pipex.h"
 
+
+int	ft_countstring(char ** script_array)
+{
+	int	count;
+
+	count = 0;
+	while (script_array[count])
+	{
+		count++;
+	}
+	return (count);
+}
+
+int is_two_quotes(char* str)
+{
+	int count;
+	int i;
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			count++;
+		i++;
+	}
+	return (count % 2) == 0;
+}
+
 // "awk '{print avs $2}'"
 char	**handle_quotes_in_script(char **script)
 {
@@ -21,36 +49,67 @@ char	**handle_quotes_in_script(char **script)
 
 	i = 0;
 	j = 0;
-	new_script = (char **)malloc(sizeof(char *) * (ft_strlen(script) + 1));
-	if (!new_script)
-		handle_error(1, "Memory allocation error\n");
+	new_script = (char **)malloc(sizeof(char *) * (ft_countstring(script) + 1));
 	while (script[i])
 	{
-		if (ft_strchr("\'", script[i][0]))
+		if (ft_strchr(script[i], '\'') && !is_two_quotes(script[i]))
 		{
-			new_script[j] = ft_strdup(script[i]);
-			while (script[++i])
+			new_script[j] = ft_strdup(script[i++]);
+			while (script[i])
 			{
-				new_script[j] = ft_strjoin(new_script[j], " ");
-				new_script[j] = ft_strjoin(new_script[j], script[i]);
-				if (ft_strchr("\'", script[i]))
+				new_script[j] = ft_strjoin(new_script[j], ft_strjoin(" ", script[i]));
+				if (ft_strchr(script[i++], '\''))
 					break ;
 			}
 		}
 		else
-			new_script[j] = ft_strdup(script[i]);
-		i++;
+			new_script[j] = ft_strdup(script[i++]);
 		j++;
 	}
 	new_script[j] = NULL;
 	return (new_script);
 }
 
+char* erase_first_and_last_quote(char* str)
+{
+	char* str_without_quotes;
+	int i;
+	int len = ft_strlen(str);
+
+	if (str[0] == '\'' && str[len - 1] == '\'')
+	{
+		str_without_quotes = (char*)malloc(sizeof(char) * (len - 1)); // Yeni uzunluk (len - 2) kadar olmalı!
+		if (!str_without_quotes)
+			return NULL;
+		i = 1;
+		while (i < len - 1) // Burada doğru sınırlandırma
+		{
+			str_without_quotes[i - 1] = str[i]; // `i - 1` ile kaydırılmış kopyalama
+			i++;
+		}
+		str_without_quotes[i - 1] = '\0'; // Doğru şekilde null-terminate
+		free(str);
+		return str_without_quotes;
+	}
+	return str;
+}
+
+
 char	**get_next_script(int num, char **argv)
 {
+	char** temp_script;
 	char	**script;
+	int		i;
 
-	script = ft_split(argv[num], ' ');
+	temp_script = ft_split(argv[num], ' ');
+	script = handle_quotes_in_script(temp_script);
+	free_script(temp_script);
+	i = 0;
+	while (script[i])
+	{
+		script[i] = erase_first_and_last_quote(script[i]);
+		i++;
+	}
 	if (script == NULL || script[0] == NULL)
 		handle_error(3, "Error: get_next_script returned NULL or empty");
 	return (script);

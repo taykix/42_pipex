@@ -17,6 +17,15 @@ void	free_path_and_script(char *path, char **script)
 	free(script);
 }
 
+void	free_script(char** script)
+{
+	for (int i = 0; script[i] != NULL; i++)
+	{
+		free(script[i]);
+	}
+	free(script);
+}
+
 void	free_pipex(t_pipex *pipe, int argc)
 {
 	int	i;
