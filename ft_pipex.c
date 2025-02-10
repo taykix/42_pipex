@@ -40,6 +40,19 @@ int is_two_quotes(char* str)
 	return (count % 2) == 0;
 }
 
+char* str_join_with_free(char* new_script, char* script)
+{
+	char* temp;
+	char* joined;
+	
+	temp = ft_strjoin(" ", script);
+	joined = ft_strjoin(new_script, temp);
+	free(temp);
+	free(new_script);
+
+	return joined;
+}
+
 // "awk '{print avs $2}'"
 char	**handle_quotes_in_script(char **script)
 {
@@ -57,7 +70,8 @@ char	**handle_quotes_in_script(char **script)
 			new_script[j] = ft_strdup(script[i++]);
 			while (script[i])
 			{
-				new_script[j] = ft_strjoin(new_script[j], ft_strjoin(" ", script[i]));
+				new_script[j] = str_join_with_free(new_script[j], script[i]);
+				//new_script[j] = ft_strjoin(new_script[j], ft_strjoin(" ", script[i]));
 				if (ft_strchr(script[i++], '\''))
 					break ;
 			}
@@ -78,16 +92,16 @@ char* erase_first_and_last_quote(char* str)
 
 	if (str[0] == '\'' && str[len - 1] == '\'')
 	{
-		str_without_quotes = (char*)malloc(sizeof(char) * (len - 1)); // Yeni uzunluk (len - 2) kadar olmalı!
+		str_without_quotes = (char*)malloc(sizeof(char) * (len - 1));
 		if (!str_without_quotes)
 			return NULL;
 		i = 1;
-		while (i < len - 1) // Burada doğru sınırlandırma
+		while (i < len - 1)
 		{
-			str_without_quotes[i - 1] = str[i]; // `i - 1` ile kaydırılmış kopyalama
+			str_without_quotes[i - 1] = str[i];
 			i++;
 		}
-		str_without_quotes[i - 1] = '\0'; // Doğru şekilde null-terminate
+		str_without_quotes[i - 1] = '\0';
 		free(str);
 		return str_without_quotes;
 	}
