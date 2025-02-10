@@ -129,15 +129,17 @@ char	**get_next_script(int num, char **argv)
 	return (script);
 }
 
-t_pipex	*init_pipex(t_pipex *pipe, char **argv, int argc)
+t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 {
 	int	i;
+	char** all_paths;
 
 	pipe->in_fd = open_file(argv[1], 0);
 	pipe->out_fd = open_file(argv[argc - 1], 1);
 	pipe->is_invalid_infile = 0;
 	pipe->script = (char ***)malloc((argc - 3) * sizeof(char **));
-	pipe->path = (char **)malloc((argc - 3) * sizeof(char *));
+	pipe->path = (char**)malloc((argc - 3) * sizeof(char*));
+	all_paths = get_all_paths(envp);
 	if (!pipe->script || !pipe->path)
 		handle_error(1, "Memory allocation error\n");
 	i = 0;
@@ -145,25 +147,91 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, int argc)
 	{
 		pipe->script[i] = get_next_script(i + 2, argv);
 		if (pipe->script[i] == NULL || pipe->script[i][0] == NULL)
-		{
-			pipe->path[i] = NULL;
 			handle_error(3, "Error: Invalid command in script");
-		}
-		pipe->path[i] = ft_strjoin("/bin/", pipe->script[i][0]);
-		if (!pipe->path[i])
-			handle_error(1, "Memory allocation failed for path");
+		pipe->path[i] = get_accesible_path(pipe->script[i][0], all_paths);
+		printf("i is : %d, pipe->script[i][0] is %s, pipe->path[i] is %s \n", i, pipe->script[i][0], pipe->path[i]);
 		i++;
 	}
+	free_script(all_paths);
 	return (pipe);
 }
 
-int	main(int argc, char *argv[])
+char* find_path(char** envp)
 {
+	while (ft_strncmp("PATH", *envp, 4))
+		envp++;
+	return (*envp + 5);
+}
+
+char** get_all_paths(char** envp)
+{
+	char** all_paths;
+	char* temp;
+	char* path;
+	int i;
+	path = find_path(envp);
+	if (!path)
+		handle_error(5, "There is no path!\n");
+	all_paths = ft_split(path, ':');
+
+	i = 0;
+	while (all_paths[i])
+	{
+		temp = ft_strjoin(all_paths[i], "/");
+		free(all_paths[i]);
+		all_paths[i] = temp;
+		i++;
+	}
+	return (all_paths);
+}
+
+char* get_accesible_path(char * cmd, char ** paths)
+{
+	char** all_paths;
+	char* path_with_cmd;
+	int i;
+
+	all_paths = paths;
+	i = 0;
+
+	while (all_paths[i])
+	{
+		path_with_cmd = ft_strjoin(all_paths[i], cmd);
+		if (access(path_with_cmd, F_OK) == 0)
+		{
+			printf("Newer here ? \n");
+			return (path_with_cmd);
+		}
+		else
+			free(path_with_cmd);
+		i++;
+	}
+	return 0;
+}
+
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	/*
+	char* path = find_path(envp);
+	char** all_paths = get_all_paths(path);
+	int i = argc;
+	
+	
+	while (all_paths[i])
+	{
+		printf("%s\n", all_paths[i]);
+		i++;
+	}
+	free_script(all_paths);
+	*/
+	
 	t_pipex	pipe;
 	int		pid;
 	int		pid2;
 
-	init_pipex(&pipe, argv, argc);
+	init_pipex(&pipe, argv, envp, argc);
+	printf("ARE WE HERE MAN?\n");
 	create_pipe(pipe.fd);
 	pid = fork();
 	if (pid < 0)

@@ -29,5 +29,7 @@ void		free_pipex(t_pipex *pipe, int argc);
 void		create_pipe(int fd[2]);
 void		free_path_and_script(char *path, char **script);
 void		free_script(char** script);
+char**		get_all_paths(char** envp);
+char*		get_accesible_path(char* cmd, char** paths);
 
 #endif
