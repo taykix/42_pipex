@@ -53,7 +53,6 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 		if (pipe->script[i] == NULL || pipe->script[i][0] == NULL)
 			handle_error(3, "Error: Invalid command in script");
 		pipe->path[i] = get_accesible_path(pipe->script[i][0], all_paths);
-		printf("i is : %d, pipe->script[i][0] is %s, pipe->path[i] is %s \n", i, pipe->script[i][0], pipe->path[i]);
 		i++;
 	}
 	free_script(all_paths);
