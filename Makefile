@@ -1,7 +1,10 @@
 CC = gcc
-CFLAGS = -g 
+CFLAGS = -g -Wall -Werror -Wextra
 SRCS = ft_pipex.c \
-       utils.c
+       utils.c \
+	   handle_script.c \
+	   handle_path.c \
+	   handle_free.c
 OBJS = $(SRCS:.c=.o)
 LIBFT_DIR = ./ft_printf/libft
 LIBFT = $(LIBFT_DIR)/libft.a

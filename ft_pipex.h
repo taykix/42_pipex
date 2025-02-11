@@ -19,17 +19,25 @@ typedef struct s_pipex
 	char	**path;
 }			t_pipex;
 
-void		handle_error(int errno, const char *errmsg);
 int			open_file(const char *filename, int in_out);
 void		execute_command(const char *path, char **args);
 char		**get_next_script(int num, char **argv);
 int			parent_process(t_pipex *pipe, int i);
 int			child_process(t_pipex *pipe, int i);
-void		free_pipex(t_pipex *pipe, int argc);
 void		create_pipe(int fd[2]);
+void		free_pipex(t_pipex* pipe, int argc);
 void		free_path_and_script(char *path, char **script);
 void		free_script(char** script);
+void		handle_error(int errno, const char* errmsg);
+
 char**		get_all_paths(char** envp);
 char*		get_accesible_path(char* cmd, char** paths);
+char*		find_path(char** envp);
+
+int			ft_countstring(char** script_array);
+char*		str_join_with_free(char* new_script, char* script);
+int			is_two_quotes(char* str);
+char**		handle_quotes_in_script(char** script);
+char*		erase_first_and_last_quote(char* str);
 
 #endif

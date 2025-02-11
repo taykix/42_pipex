@@ -7,39 +7,6 @@ void	execute_command(const char *path, char **args)
 	exit(1);
 }
 
-void	free_path_and_script(char *path, char **script)
-{
-	free(path);
-	for (int i = 0; script[i] != NULL; i++)
-	{
-		free(script[i]);
-	}
-	free(script);
-}
-
-void	free_script(char** script)
-{
-	for (int i = 0; script[i] != NULL; i++)
-	{
-		free(script[i]);
-	}
-	free(script);
-}
-
-void	free_pipex(t_pipex *pipe, int argc)
-{
-	int	i;
-
-	i = 0;
-	while (i < argc - 3)
-	{
-		free_path_and_script(pipe->path[i], pipe->script[i]);
-		i++;
-	}
-	free(pipe->path);
-	free(pipe->script);
-}
-
 int	child_process(t_pipex *pipe, int i)
 {
 	close(pipe->fd[0]);
@@ -66,12 +33,6 @@ int	parent_process(t_pipex *pipe, int i)
 	close(pipe->out_fd);
 	execute_command(pipe->path[i], pipe->script[i]);
 	return (-1);
-}
-
-void	handle_error(int errno, const char *errmsg)
-{
-	perror(errmsg);
-	exit(errno);
 }
 
 int	open_file(const char *filename, int in_out)
