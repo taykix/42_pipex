@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/14 15:54:51 by tayki             #+#    #+#             */
+/*   Updated: 2025/02/14 17:29:08 by tayki            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_pipex.h"
 
 void	execute_command(const char *path, char **args)
@@ -37,7 +49,7 @@ int	parent_process(t_pipex *pipe, int i)
 
 int	open_file(const char *filename, int in_out)
 {
-	int fd;
+	int	fd;
 
 	if (in_out == 0)
 		fd = open(filename, O_RDONLY);

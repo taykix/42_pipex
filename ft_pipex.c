@@ -1,21 +1,20 @@
-﻿/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_pipex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:10:31 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/07 20:59:14 by tkarakay         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:27:51 by tayki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_pipex.h"
 
-
 char	**get_next_script(int num, char **argv)
 {
-	char** temp_script;
+	char	**temp_script;
 	char	**script;
 	int		i;
 
@@ -35,14 +34,14 @@ char	**get_next_script(int num, char **argv)
 
 t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 {
-	int	i;
-	char** all_paths;
+	int		i;
+	char	**all_paths;
 
 	pipe->in_fd = open_file(argv[1], 0);
 	pipe->out_fd = open_file(argv[argc - 1], 1);
 	pipe->is_invalid_infile = 0;
 	pipe->script = (char ***)malloc((argc - 3) * sizeof(char **));
-	pipe->path = (char**)malloc((argc - 3) * sizeof(char*));
+	pipe->path = (char **)malloc((argc - 3) * sizeof(char *));
 	all_paths = get_all_paths(envp);
 	if (!pipe->script || !pipe->path)
 		handle_error(1, "Memory allocation error\n");
@@ -58,7 +57,6 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 	free_script(all_paths);
 	return (pipe);
 }
-
 
 int	main(int argc, char *argv[], char *envp[])
 {

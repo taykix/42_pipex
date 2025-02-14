@@ -1,26 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_free.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/14 15:55:12 by tayki             #+#    #+#             */
+/*   Updated: 2025/02/14 17:28:40 by tayki            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_pipex.h"
 
-void	free_path_and_script(char* path, char** script)
+void	free_path_and_script(char *path, char **script)
 {
+	int	i;
+
 	free(path);
-	for (int i = 0; script[i] != NULL; i++)
+	i = 0;
+	while (script[i] != NULL)
 	{
 		free(script[i]);
+		i++;
 	}
 	free(script);
 }
 
-void	free_script(char** script)
+void	free_script(char **script)
 {
-	for (int i = 0; script[i] != NULL; i++)
+	int	i;
+
+	i = 0;
+	while (script[i] != NULL)
 	{
 		free(script[i]);
+		i++;
 	}
 	free(script);
 }
 
-void	free_pipex(t_pipex* pipe, int argc)
+void	free_pipex(t_pipex *pipe, int argc)
 {
 	int	i;
 
@@ -34,7 +53,7 @@ void	free_pipex(t_pipex* pipe, int argc)
 	free(pipe->script);
 }
 
-void	handle_error(int errno, const char* errmsg)
+void	handle_error(int errno, const char *errmsg)
 {
 	perror(errmsg);
 	exit(errno);
