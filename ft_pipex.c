@@ -6,7 +6,7 @@
 /*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:10:31 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/14 17:48:29 by tayki            ###   ########.fr       */
+/*   Updated: 2025/02/14 17:49:32 by tayki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	main(int argc, char *argv[], char *envp[])
 	int		pid;
 	int		pid2;
 
-	if (argc != 4)
+	if (argc != 5)
 		return (1);
 	init_pipex(&pipe, argv, envp, argc);
 	create_pipe(pipe.fd);
