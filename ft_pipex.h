@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipex.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 17:30:27 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/14 17:30:30 by tayki            ###   ########.fr       */
+/*   Updated: 2025/02/25 20:48:06 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ typedef struct s_pipex
 	int		is_invalid_infile;
 	char	***script;
 	char	**path;
+	char	**envp;
 }			t_pipex;
 
 int			open_file(const char *filename, int in_out);
-void		execute_command(const char *path, char **args);
+void		execute_command(const char *path, char **args, char **envp);
 char		**get_next_script(int num, char **argv);
 int			parent_process(t_pipex *pipe, int i);
 int			child_process(t_pipex *pipe, int i);
@@ -50,5 +51,6 @@ char		*str_join_with_free(char *new_script, char *script);
 int			is_two_quotes(char *str);
 char		**handle_quotes_in_script(char **script);
 char		*erase_first_and_last_quote(char *str);
+void		wait_for_child(pid_t pid, t_pipex *pipe, int argc);
 
 #endif

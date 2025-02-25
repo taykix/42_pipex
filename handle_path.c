@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_path.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:55:08 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/14 17:30:52 by tayki            ###   ########.fr       */
+/*   Updated: 2025/02/25 19:53:53 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**get_all_paths(char **envp)
 
 	path = find_path(envp);
 	if (!path)
-		handle_error(5, "There is no path!\n");
+		handle_error(127, "pipex: command not found\n");
 	all_paths = ft_split(path, ':');
 	i = 0;
 	while (all_paths[i])

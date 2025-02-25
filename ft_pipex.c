@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tayki <tayki@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:10:31 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/14 17:49:32 by tayki            ###   ########.fr       */
+/*   Updated: 2025/02/25 21:09:18 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_pipex.h"
+
+void	wait_for_child(pid_t pid, t_pipex *pipe, int argc)
+{
+	int	status;
+	int	exit_code;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+	{
+		exit_code = WEXITSTATUS(status);
+		if (exit_code != 0)
+		{
+			free_pipex(pipe, argc);
+			exit(exit_code);
+		}
+	}
+}
 
 char	**get_next_script(int num, char **argv)
 {
@@ -28,7 +45,7 @@ char	**get_next_script(int num, char **argv)
 		i++;
 	}
 	if (script == NULL || script[0] == NULL)
-		handle_error(3, "Error: get_next_script returned NULL or empty");
+		handle_error(1, "Error: Invalid command in script");
 	return (script);
 }
 
@@ -39,7 +56,7 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 
 	pipe->in_fd = open_file(argv[1], 0);
 	pipe->out_fd = open_file(argv[argc - 1], 1);
-	pipe->is_invalid_infile = 0;
+	pipe->envp = envp;
 	pipe->script = (char ***)malloc((argc - 3) * sizeof(char **));
 	pipe->path = (char **)malloc((argc - 3) * sizeof(char *));
 	all_paths = get_all_paths(envp);
@@ -50,7 +67,9 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 	{
 		pipe->script[i] = get_next_script(i + 2, argv);
 		if (pipe->script[i] == NULL || pipe->script[i][0] == NULL)
-			handle_error(3, "Error: Invalid command in script");
+		{
+			handle_error(1, "Error: Invalid command in script");
+		}
 		pipe->path[i] = get_accesible_path(pipe->script[i][0], all_paths);
 		i++;
 	}
@@ -78,17 +97,17 @@ int	main(int argc, char *argv[], char *envp[])
 	create_pipe(pipe.fd);
 	pid = fork();
 	if (pid < 0)
-		handle_error(3, "Fork error\n");
+		handle_error(1, "Fork error\n");
 	if (pid == 0)
 		child_process(&pipe, 0);
 	wait(NULL);
 	pid2 = fork();
 	if (pid2 < 0)
-		handle_error(3, "Fork error\n");
+		handle_error(1, "Fork error\n");
 	if (pid2 == 0)
 		parent_process(&pipe, 1);
 	close_pipe_fds(&pipe);
-	wait(NULL);
+	wait_for_child(pid2, &pipe, argc);
 	free_pipex(&pipe, argc);
 	return (0);
 }
