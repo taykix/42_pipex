@@ -6,7 +6,7 @@
 /*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:54:51 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/26 19:56:27 by tkarakay         ###   ########.fr       */
+/*   Updated: 2025/02/26 20:12:09 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	execute_command(const char *path, char **args, char **envp)
 {
 	if (!path || access(path, F_OK) == -1)
 	{
-		handle_error(127, "Error: Command not found\n");
+		handle_error(127, "pipex");
 	}
 	else if (access(path, X_OK) == -1)
 	{

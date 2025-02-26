@@ -6,7 +6,7 @@
 /*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:10:31 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/26 18:33:29 by tkarakay         ###   ########.fr       */
+/*   Updated: 2025/02/26 20:08:27 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc != 5)
 		return (1);
+	if (ft_strlen(argv[1]) == 0)
+		handle_error(1, "Error: Invalid arguments\n");
 	init_pipex(&pipe, argv, envp, argc);
 	create_pipe(pipe.fd);
 	pid = fork();
