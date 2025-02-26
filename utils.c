@@ -6,7 +6,7 @@
 /*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:54:51 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/26 18:19:25 by tkarakay         ###   ########.fr       */
+/*   Updated: 2025/02/26 19:56:27 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ int	open_file(const char *filename, int in_out)
 		if (fd == -1)
 		{
 			if (access(filename, F_OK) == -1)
-				handle_error(1, "pipex: infile: No such file or directory\n");
+				handle_error(1, "pipex");
 			else if (access(filename, R_OK) == -1)
-				handle_error(1, "pipex: infile: Permission denied\n");
+				handle_error(1, "pipex");
 		}
 	}
 	else if (in_out == 1)
@@ -84,7 +84,7 @@ int	open_file(const char *filename, int in_out)
 		if (fd == -1)
 		{
 			if (access(filename, F_OK) != -1 && access(filename, W_OK) == -1)
-				handle_error(1, "pipex: outfile: Permission denied\n");
+				handle_error(1, "pipex");
 		}
 	}
 	return (fd);
