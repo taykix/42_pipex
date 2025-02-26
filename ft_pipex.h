@@ -6,7 +6,7 @@
 /*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 17:30:27 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/25 20:48:06 by tkarakay         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:10:03 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ typedef struct s_pipex
 int			open_file(const char *filename, int in_out);
 void		execute_command(const char *path, char **args, char **envp);
 char		**get_next_script(int num, char **argv);
-int			parent_process(t_pipex *pipe, int i);
-int			child_process(t_pipex *pipe, int i);
+int			parent_process(t_pipex *pipe, int i, char *argv);
+int			child_process(t_pipex *pipe, int i, char *argv);
 void		create_pipe(int fd[2]);
 void		free_pipex(t_pipex *pipe, int argc);
 void		free_path_and_script(char *path, char **script);

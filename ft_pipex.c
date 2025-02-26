@@ -6,7 +6,7 @@
 /*   By: tkarakay <tkarakay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:10:31 by tayki             #+#    #+#             */
-/*   Updated: 2025/02/25 21:09:18 by tkarakay         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:33:29 by tkarakay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 	int		i;
 	char	**all_paths;
 
-	pipe->in_fd = open_file(argv[1], 0);
-	pipe->out_fd = open_file(argv[argc - 1], 1);
+	pipe->in_fd = -1;
+	pipe->out_fd = -1;
 	pipe->envp = envp;
 	pipe->script = (char ***)malloc((argc - 3) * sizeof(char **));
 	pipe->path = (char **)malloc((argc - 3) * sizeof(char *));
@@ -79,10 +79,14 @@ t_pipex	*init_pipex(t_pipex *pipe, char **argv, char **envp, int argc)
 
 void	close_pipe_fds(t_pipex *pipe)
 {
-	close(pipe->fd[0]);
-	close(pipe->fd[1]);
-	close(pipe->in_fd);
-	close(pipe->out_fd);
+	if (pipe->fd[0] > 0)
+		close(pipe->fd[0]);
+	if (pipe->fd[1] > 0)
+		close(pipe->fd[1]);
+	if (pipe->in_fd > 0)
+		close(pipe->in_fd);
+	if (pipe->out_fd > 0)
+		close(pipe->out_fd);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -99,13 +103,13 @@ int	main(int argc, char *argv[], char *envp[])
 	if (pid < 0)
 		handle_error(1, "Fork error\n");
 	if (pid == 0)
-		child_process(&pipe, 0);
+		child_process(&pipe, 0, argv[1]);
 	wait(NULL);
 	pid2 = fork();
 	if (pid2 < 0)
 		handle_error(1, "Fork error\n");
 	if (pid2 == 0)
-		parent_process(&pipe, 1);
+		parent_process(&pipe, 1, argv[argc - 1]);
 	close_pipe_fds(&pipe);
 	wait_for_child(pid2, &pipe, argc);
 	free_pipex(&pipe, argc);
